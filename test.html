@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表格编辑器测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .toolbar {
+            padding: 16px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #64748b;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .table-container {
+            padding: 20px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .simple-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .simple-table th,
+        .simple-table td {
+            padding: 12px 8px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        .simple-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .simple-table td {
+            color: #374151;
+        }
+
+        .simple-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .simple-table td[contenteditable="true"]:focus {
+            outline: 2px solid #2563eb;
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #64748b;
+        }
+
+        .status {
+            padding: 10px 20px;
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+            margin-bottom: 20px;
+        }
+
+        .error {
+            background: #fef2f2;
+            color: #dc2626;
+            border-left-color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="toolbar">
+            <button class="btn" onclick="addRow()">添加行</button>
+            <button class="btn btn-secondary" onclick="deleteRow()">删除最后一行</button>
+            <button class="btn btn-secondary" onclick="saveData()">保存数据</button>
+            <button class="btn btn-secondary" onclick="loadData()">加载数据</button>
+        </div>
+        
+        <div class="table-container">
+            <div id="status" class="status">表格编辑器已就绪</div>
+            <div id="tableContent">
+                <div class="loading">正在初始化表格...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简单的表格数据
+        let tableData = [
+            { id: 1, name: '张三', age: 28, email: 'zhangsan@example.com', department: '技术部' },
+            { id: 2, name: '李四', age: 32, email: 'lisi@example.com', department: '产品部' },
+            { id: 3, name: '王五', age: 26, email: 'wangwu@example.com', department: '设计部' }
+        ];
+
+        let columns = [
+            { field: 'id', title: 'ID', editable: false },
+            { field: 'name', title: '姓名', editable: true },
+            { field: 'age', title: '年龄', editable: true },
+            { field: 'email', title: '邮箱', editable: true },
+            { field: 'department', title: '部门', editable: true }
+        ];
+
+        // 渲染表格
+        function renderTable() {
+            const tableContent = document.getElementById('tableContent');
+            
+            const thead = columns.map(col => 
+                `<th>${col.title}</th>`
+            ).join('');
+            
+            const tbody = tableData.map((record, rowIndex) => {
+                const cells = columns.map(col => {
+                    const value = record[col.field] || '';
+                    const editable = col.editable ? 'contenteditable="true"' : '';
+                    return `<td ${editable} data-field="${col.field}" data-row="${rowIndex}" onblur="updateCell(this)">${value}</td>`;
+                }).join('');
+                return `<tr data-row="${rowIndex}">${cells}</tr>`;
+            }).join('');
+
+            tableContent.innerHTML = `
+                <table class="simple-table">
+                    <thead><tr>${thead}</tr></thead>
+                    <tbody>${tbody}</tbody>
+                </table>
+            `;
+            
+            updateStatus('表格渲染完成，共 ' + tableData.length + ' 条记录');
+        }
+
+        // 更新单元格
+        function updateCell(cell) {
+            const field = cell.dataset.field;
+            const row = parseInt(cell.dataset.row);
+            const value = cell.textContent.trim();
+            
+            if (tableData[row] && field) {
+                tableData[row][field] = value;
+                updateStatus('已更新 ' + field + ' 字段');
+            }
+        }
+
+        // 添加行
+        function addRow() {
+            const newId = Math.max(...tableData.map(r => r.id || 0)) + 1;
+            const newRow = {
+                id: newId,
+                name: '新用户',
+                age: 25,
+                email: 'new@example.com',
+                department: '未分配'
+            };
+            
+            tableData.push(newRow);
+            renderTable();
+            updateStatus('已添加新行，ID: ' + newId);
+        }
+
+        // 删除行
+        function deleteRow() {
+            if (tableData.length > 1) {
+                const removed = tableData.pop();
+                renderTable();
+                updateStatus('已删除行，ID: ' + removed.id);
+            } else {
+                updateStatus('至少需要保留一行数据', true);
+            }
+        }
+
+        // 保存数据
+        function saveData() {
+            try {
+                localStorage.setItem('simpleTableData', JSON.stringify(tableData));
+                updateStatus('数据已保存到本地存储');
+            } catch (error) {
+                updateStatus('保存失败: ' + error.message, true);
+            }
+        }
+
+        // 加载数据
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('simpleTableData');
+                if (saved) {
+                    tableData = JSON.parse(saved);
+                    renderTable();
+                    updateStatus('已从本地存储加载数据');
+                } else {
+                    updateStatus('没有找到保存的数据', true);
+                }
+            } catch (error) {
+                updateStatus('加载失败: ' + error.message, true);
+            }
+        }
+
+        // 更新状态
+        function updateStatus(message, isError = false) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = isError ? 'status error' : 'status';
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                renderTable();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

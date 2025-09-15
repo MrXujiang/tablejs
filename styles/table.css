@@ -1,0 +1,850 @@
+/* 表格容器样式 */
+.table-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+    margin: 16px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    position: relative;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.record-count,
+.selected-count {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.selected-count {
+    color: var(--primary-color);
+}
+
+.table-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* VTable 容器 */
+.vtable-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* VTable 自定义样式 */
+.vtable-container .vtable {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+}
+
+/* 表格头部样式 */
+.vtable-container .vtable-header {
+    background: var(--bg-tertiary) !important;
+    border-bottom: 2px solid var(--border-color) !important;
+}
+
+.vtable-container .vtable-header-cell {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    border-right: 1px solid var(--border-color) !important;
+    padding: 12px 8px !important;
+    position: relative !important;
+}
+
+.vtable-container .vtable-header-cell:hover {
+    background: var(--bg-secondary) !important;
+}
+
+/* 表格单元格样式 */
+.vtable-container .vtable-cell {
+    border-right: 1px solid var(--border-color) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 8px !important;
+    font-size: 13px !important;
+    color: var(--text-primary) !important;
+    transition: var(--transition) !important;
+}
+
+.vtable-container .vtable-cell:hover {
+    background: var(--bg-secondary) !important;
+}
+
+.vtable-container .vtable-cell.selected {
+    background: rgba(37, 99, 235, 0.1) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.vtable-container .vtable-cell.editing {
+    background: var(--bg-primary) !important;
+    box-shadow: inset 0 0 0 2px var(--primary-color) !important;
+}
+
+/* 行样式 */
+.vtable-container .vtable-row:nth-child(even) {
+    background: rgba(248, 250, 252, 0.5) !important;
+}
+
+.vtable-container .vtable-row:hover {
+    background: var(--bg-secondary) !important;
+}
+
+.vtable-container .vtable-row.selected {
+    background: rgba(37, 99, 235, 0.05) !important;
+}
+
+/* 拖拽样式 */
+.vtable-container .vtable-drag-indicator {
+    background: var(--primary-color) !important;
+    opacity: 0.8 !important;
+}
+
+.vtable-container .vtable-drop-indicator {
+    background: var(--success-color) !important;
+    height: 3px !important;
+    border-radius: 2px !important;
+}
+
+/* 排序指示器 */
+.vtable-container .vtable-sort-indicator {
+    color: var(--primary-color) !important;
+    font-size: 12px !important;
+    margin-left: 4px !important;
+}
+
+/* 筛选指示器 */
+.vtable-container .vtable-filter-indicator {
+    color: var(--info-color) !important;
+    font-size: 12px !important;
+    margin-left: 4px !important;
+}
+
+/* 分组样式 */
+.vtable-container .vtable-group-header {
+    background: var(--bg-tertiary) !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    padding: 12px 16px !important;
+    border-bottom: 2px solid var(--border-color) !important;
+}
+
+.vtable-container .vtable-group-header .vtable-group-toggle {
+    color: var(--primary-color) !important;
+    cursor: pointer !important;
+    margin-right: 8px !important;
+    transition: var(--transition) !important;
+}
+
+.vtable-container .vtable-group-header .vtable-group-toggle:hover {
+    color: var(--primary-hover) !important;
+}
+
+/* 图片单元格样式 */
+.vtable-image-cell {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 4px !important;
+}
+
+.vtable-image-cell img {
+    max-width: 100% !important;
+    max-height: 60px !important;
+    border-radius: var(--radius-sm) !important;
+    object-fit: cover !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
+}
+
+.vtable-image-cell img:hover {
+    transform: scale(1.05) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.vtable-image-placeholder {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 60px !important;
+    height: 40px !important;
+    background: var(--bg-tertiary) !important;
+    border: 2px dashed var(--border-color) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-muted) !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
+}
+
+.vtable-image-placeholder:hover {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    background: rgba(37, 99, 235, 0.05) !important;
+}
+
+/* 编辑器样式 */
+.vtable-editor {
+    border: 2px solid var(--primary-color) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 4px 8px !important;
+    font-size: 13px !important;
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    outline: none !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.vtable-editor:focus {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+/* 选择器样式 */
+.vtable-select-editor {
+    border: 2px solid var(--primary-color) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 4px 8px !important;
+    font-size: 13px !important;
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    outline: none !important;
+    cursor: pointer !important;
+}
+
+/* 日期选择器样式 */
+.vtable-date-editor {
+    border: 2px solid var(--primary-color) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 4px 8px !important;
+    font-size: 13px !important;
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    outline: none !important;
+}
+
+/* 滚动条样式 */
+.vtable-container ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.vtable-container ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+}
+
+.vtable-container ::-webkit-scrollbar-thumb {
+    background: var(--border-hover);
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.vtable-container ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* 响应式表格 */
+@media (max-width: 768px) {
+    .table-container {
+        margin: 8px;
+        border-radius: var(--radius-md);
+    }
+    
+    .table-header {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .table-info {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+    
+    .vtable-container .vtable-header-cell,
+    .vtable-container .vtable-cell {
+        padding: 6px !important;
+        font-size: 12px !important;
+    }
+    
+    .vtable-image-cell img {
+        max-height: 40px !important;
+    }
+    
+    .vtable-image-placeholder {
+        width: 40px !important;
+        height: 30px !important;
+        font-size: 10px !important;
+    }
+}
+
+/* 表格加载动画 */
+@keyframes tableLoad {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.vtable-container.loading {
+    animation: tableLoad 0.5s ease;
+}
+
+/* 高亮动画 */
+@keyframes cellHighlight {
+    0% {
+        background: rgba(37, 99, 235, 0.2) !important;
+    }
+    100% {
+        background: transparent !important;
+    }
+}
+
+.vtable-container .vtable-cell.highlight {
+    animation: cellHighlight 1s ease;
+}
+
+/* 备用HTML表格样式 */
+.fallback-table-container {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.fallback-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--bg-primary);
+}
+
+.fallback-table th {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 12px 8px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.fallback-table td {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    transition: var(--transition);
+    min-height: 40px;
+}
+
+.fallback-table td:focus {
+    outline: 2px solid var(--primary-color);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.fallback-table tr:hover {
+    background: var(--bg-secondary);
+}
+
+.fallback-table tr:nth-child(even) {
+    background: rgba(248, 250, 252, 0.5);
+}
+
+.fallback-table tr:nth-child(even):hover {
+    background: var(--bg-secondary);
+}
+
+.fallback-table img {
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.fallback-table img:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+/* 简化版表格样式 */
+.simple-table-container {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.simple-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--bg-primary);
+    min-width: 800px;
+}
+
+.simple-table th {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 12px 8px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    user-select: none;
+    transition: var(--transition);
+}
+
+.simple-table th:hover {
+    background: var(--bg-secondary);
+}
+
+.simple-table th i {
+    opacity: 0.5;
+    transition: var(--transition);
+}
+
+.simple-table th:hover i {
+    opacity: 1;
+}
+
+.simple-table td {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    transition: var(--transition);
+    min-height: 40px;
+    vertical-align: middle;
+}
+
+.simple-table td.editable-cell {
+    cursor: text;
+}
+
+.simple-table td.editable-cell:hover {
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.simple-table td.editable-cell:focus {
+    outline: 2px solid var(--primary-color);
+    background: rgba(37, 99, 235, 0.1);
+}
+
+.simple-table tr {
+    transition: var(--transition);
+}
+
+.simple-table tr:hover {
+    background: var(--bg-secondary);
+}
+
+.simple-table tr:nth-child(even) {
+    background: rgba(248, 250, 252, 0.5);
+}
+
+.simple-table tr:nth-child(even):hover {
+    background: var(--bg-secondary);
+}
+
+.simple-table tr.selected {
+    background: rgba(37, 99, 235, 0.1) !important;
+}
+
+.simple-table tr.selected td {
+    border-color: var(--primary-color);
+}
+
+/* 表格动画 */
+@keyframes rowInsert {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.simple-table tr.new-row {
+    animation: rowInsert 0.3s ease;
+}
+
+/* 单元格编辑器样式 */
+.cell-editor {
+    width: 100% !important;
+    border: none !important;
+    padding: 4px 8px !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    background: white !important;
+    outline: 2px solid var(--primary-color) !important;
+    outline-offset: -2px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.cell-editor:focus {
+    outline: 2px solid var(--primary-hover) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+/* 编辑状态指示 */
+.simple-table td.editing {
+    background: #fef3c7 !important;
+    border: 2px solid #f59e0b !important;
+}
+
+/* 图片单元格样式 */
+.cell-image {
+    max-width: 60px;
+    max-height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.cell-image:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+/* 图片占位符 */
+.image-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 40px;
+    background: var(--bg-tertiary);
+    border: 2px dashed var(--border-color);
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.image-placeholder:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+/* 分组表格样式 */
+.grouped-table .group-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.grouped-table .group-header:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.grouped-table .group-title {
+    font-weight: 600;
+    color: #495057;
+    padding: 12px 16px;
+    border-left: 4px solid #007bff;
+}
+
+.grouped-table .group-count {
+    color: #6c757d;
+    font-weight: normal;
+    margin-left: 8px;
+}
+
+.grouped-table .group-row {
+    background-color: #fdfdfd;
+}
+
+.grouped-table .group-row:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.grouped-table .group-row:hover {
+    background-color: #e3f2fd;
+}
+
+/* 列宽调整样式 */
+.resizable-header {
+    position: relative;
+}
+
+.column-resizer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    cursor: col-resize;
+    background: transparent;
+    z-index: 10;
+}
+
+.column-resizer:hover {
+    background: #007bff;
+}
+
+.column-resizer.resizing {
+    background: #007bff;
+}
+
+/* 多选样式 */
+.simple-table tbody tr.selected {
+    background-color: #e3f2fd !important;
+}
+
+.simple-table tbody tr.selected td {
+    background-color: inherit;
+}
+
+.selection-checkbox {
+    margin-right: 8px;
+}
+
+/* 下拉选择标签样式 */
+.select-tag {
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.select-tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 列宽调整优化 */
+.column-resizer {
+    transition: background-color 0.15s ease;
+}
+
+.column-resizer:hover {
+    background-color: #007bff !important;
+}
+
+.column-resizer.resizing {
+    background-color: #0056b3 !important;
+}
+
+/* 表格单元格优化 */
+.simple-table td {
+    transition: background-color 0.15s ease;
+}
+
+.simple-table tbody tr:hover td {
+    background-color: #f8f9fa;
+}
+
+/* 多选框选区域样式 */
+.selection-area {
+    position: absolute;
+    border: 2px dashed #007bff;
+    background: rgba(0, 123, 255, 0.1);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* 选中的单元格样式 */
+.simple-table td.selected-cell {
+    background-color: rgba(0, 123, 255, 0.2) !important;
+    border: 2px solid #007bff !important;
+}
+
+/* 图片上传容器样式 */
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+}
+
+.image-upload-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.image-upload-btn:hover {
+    background: #0056b3;
+}
+
+.image-file-input {
+    display: none !important;
+}
+
+/* 添加行弹窗样式 */
+.add-row-modal {
+    max-width: 600px;
+    width: 90%;
+}
+
+.add-row-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.add-row-form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-row-form .form-group:last-child {
+    grid-column: 1 / -1;
+}
+
+.add-row-form label {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #374151;
+}
+
+.add-row-form .form-control {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.add-row-form .form-control:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.add-row-form .form-text {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.add-row-form .image-upload-field {
+    grid-column: 1 / -1;
+}
+
+/* 新行高亮动画 */
+.simple-table tr.new-row {
+    background: linear-gradient(90deg, #dcfce7, #f0fdf4) !important;
+    animation: newRowHighlight 2s ease-out;
+}
+
+@keyframes newRowHighlight {
+    0% {
+        background: linear-gradient(90deg, #22c55e, #16a34a) !important;
+        color: white;
+    }
+    100% {
+        background: linear-gradient(90deg, #dcfce7, #f0fdf4) !important;
+        color: inherit;
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .add-row-form {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .add-row-modal {
+        width: 95%;
+        margin: 20px auto;
+    }
+}
+
+/* 多选框选择样式 */
+.selection-box {
+    position: absolute;
+    border: 2px dashed #007bff;
+    background: rgba(0, 123, 255, 0.1);
+    pointer-events: none;
+    z-index: 100;
+    display: none;
+}
+
+.table-container.selecting {
+    cursor: crosshair;
+}
+
+.table-container td.selecting {
+    background-color: rgba(0, 123, 255, 0.2) !important;
+    border: 1px solid #007bff !important;
+}
+
+.table-container td.selected-cell {
+    background-color: rgba(0, 123, 255, 0.3) !important;
+    border: 2px solid #007bff !important;
+}
+
+.multi-select-info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 200;
+    display: none;
+}
+
+/* 新行高亮效果 */
+.highlight-new-row {
+    background: linear-gradient(90deg, #e3f2fd 0%, #bbdefb 50%, #e3f2fd 100%) !important;
+    animation: newRowPulse 3s ease-in-out;
+    border: 2px solid #2196f3 !important;
+}
+
+@keyframes newRowPulse {
+    0%, 100% {
+        background: linear-gradient(90deg, #e3f2fd 0%, #bbdefb 50%, #e3f2fd 100%);
+        transform: scale(1);
+    }
+    50% {
+        background: linear-gradient(90deg, #bbdefb 0%, #90caf9 50%, #bbdefb 100%);
+        transform: scale(1.01);
+    }
+}

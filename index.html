@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多维表格编辑器 - VTable Edition</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/table.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/modal.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部工具栏 -->
+        <header class="toolbar">
+            <div class="toolbar-left">
+                <h1 class="app-title">
+                    <i class="fas fa-table"></i>
+                    在线表格
+                </h1>
+            </div>
+            <div class="toolbar-center">
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="addRowBtn">
+                        <i class="fas fa-plus"></i>
+                        添加行
+                    </button>
+                    <button class="btn btn-secondary" id="addColumnBtn">
+                        <i class="fas fa-columns"></i>
+                        添加列
+                    </button>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary dropdown-toggle" id="testDataBtn" data-toggle="dropdown">
+                            <i class="fas fa-database"></i>
+                            测试数据
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onclick="window.app.tableManager.generateTestData(100)">100条数据</a>
+                            <a class="dropdown-item" href="#" onclick="window.app.tableManager.generateTestData(500)">500条数据</a>
+                            <a class="dropdown-item" href="#" onclick="window.app.tableManager.generateTestData(1000)">1000条数据</a>
+                        </div>
+                    </div>
+                    <button class="btn btn-info" id="importCsvBtn">
+                        <i class="fas fa-file-import"></i>
+                        导入CSV
+                    </button>
+                    <button class="btn btn-info" id="filterBtn">
+                        <i class="fas fa-filter"></i>
+                        筛选
+                    </button>
+                    <button class="btn btn-warning" id="groupBtn">
+                        <i class="fas fa-layer-group"></i>
+                        分组
+                    </button>
+                </div>
+            </div>
+            <div class="toolbar-right">
+                <button class="btn btn-danger" id="clearDataBtn">
+                    <i class="fas fa-trash-alt"></i>
+                    清空
+                </button>
+                <button class="btn btn-success" id="saveBtn">
+                    <i class="fas fa-save"></i>
+                    保存
+                </button>
+                <button class="btn btn-outline" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    导出
+                </button>
+                <a class="btn btn-primary" href="https://flowmix.turntip.cn" target="_blank">
+                    AI文档编辑器
+                </a>
+                <a class="btn btn-primary" href="http://pxcharts.com" target="_blank">
+                    多维表格编辑器
+                </a>
+            </div>
+        </header>
+
+        <!-- 侧边栏 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>表格配置</h3>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- 筛选面板 -->
+            <div class="panel" id="filterPanel" style="display: none;">
+                <h4>多条件筛选</h4>
+                <div class="filter-conditions" id="filterConditions">
+                    <!-- 动态生成筛选条件 -->
+                </div>
+                <button class="btn btn-sm btn-primary" id="addFilterCondition">
+                    <i class="fas fa-plus"></i>
+                    添加条件
+                </button>
+                <div class="panel-actions">
+                    <button class="btn btn-sm btn-success" id="applyFilter">应用筛选</button>
+                    <button class="btn btn-sm btn-secondary" id="clearFilter">清除筛选</button>
+                </div>
+            </div>
+
+            <!-- 分组面板 -->
+            <div class="panel" id="groupPanel" style="display: none;">
+                <h4>表格分组</h4>
+                <div class="group-settings">
+                    <label>分组字段：</label>
+                    <select id="groupField" class="form-control">
+                        <option value="">请选择字段</option>
+                    </select>
+                    <label>排序方式：</label>
+                    <select id="groupSort" class="form-control">
+                        <option value="asc">升序</option>
+                        <option value="desc">降序</option>
+                    </select>
+                </div>
+                <div class="panel-actions">
+                    <button class="btn btn-sm btn-success" id="applyGroup">应用分组</button>
+                    <button class="btn btn-sm btn-secondary" id="clearGroup">清除分组</button>
+                </div>
+            </div>
+
+            <!-- 列配置面板 -->
+            <div class="panel" id="columnPanel">
+                <h4>列配置</h4>
+                <div class="column-list" id="columnList">
+                    <!-- 动态生成列配置 -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-info">
+                        <span class="record-count">总计: <span id="recordCount">0</span> 条记录</span>
+                        <span class="selected-count" id="selectedCount" style="display: none;">已选择: 0 条</span>
+                    </div>
+                    <div class="table-actions">
+                        <button class="btn btn-sm btn-danger" id="deleteSelectedBtn" style="display: none;">
+                            <i class="fas fa-trash"></i>
+                            删除选中
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- VTable 容器 -->
+                <div id="tableContainer" class="vtable-container"></div>
+                
+                <!-- 加载状态 -->
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>加载中...</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <!-- 图片上传模态框 -->
+        <div class="modal" id="imageUploadModal">
+            <div class="modal-header">
+                <h3>上传图片</h3>
+                <button class="modal-close" data-modal="imageUploadModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>点击或拖拽图片到此处上传</p>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                </div>
+                <div class="image-preview" id="imagePreview" style="display: none;">
+                    <img id="previewImage" alt="预览图片">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal="imageUploadModal">取消</button>
+                <button class="btn btn-primary" id="confirmUpload">确认上传</button>
+            </div>
+        </div>
+
+        <!-- CSV导入模态框 -->
+        <div class="modal" id="importCsvModal">
+            <div class="modal-header">
+                <h3>导入CSV文件</h3>
+                <button class="modal-close" data-modal="importCsvModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>选择CSV文件：</label>
+                    <div class="file-upload-area" id="csvUploadArea">
+                        <i class="fas fa-file-csv"></i>
+                        <p>点击或拖拽CSV文件到此处</p>
+                        <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
+                    </div>
+                </div>
+                <div class="form-group" id="csvPreviewGroup" style="display: none;">
+                    <label>数据预览：</label>
+                    <div class="csv-preview" id="csvPreview">
+                        <!-- CSV预览内容 -->
+                    </div>
+                </div>
+                <div class="form-group" id="csvOptionsGroup" style="display: none;">
+                    <label>导入选项：</label>
+                    <div class="import-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="hasHeaderRow" checked>
+                            <span>第一行为标题行</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="replaceExistingData">
+                            <span>替换现有数据</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal="importCsvModal">取消</button>
+                <button class="btn btn-primary" id="confirmImportCsv" style="display: none;">确认导入</button>
+            </div>
+        </div>
+
+        <!-- 添加列模态框 -->
+        <div class="modal" id="addColumnModal">
+            <div class="modal-header">
+                <h3>添加新列</h3>
+                <button class="modal-close" data-modal="addColumnModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addColumnForm">
+                    <div class="form-group">
+                        <label>列名称：</label>
+                        <input type="text" id="columnTitle" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>列类型：</label>
+                        <select id="columnType" class="form-control">
+                            <option value="text">文本</option>
+                            <option value="number">数字</option>
+                            <option value="date">日期</option>
+                            <option value="image">图片</option>
+                            <option value="select">下拉选择</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="selectOptionsGroup" style="display: none;">
+                        <label>选项（每行一个）：</label>
+                        <textarea id="selectOptions" class="form-control" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>列宽度：</label>
+                        <input type="number" id="columnWidth" class="form-control" value="120" min="80">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal="addColumnModal">取消</button>
+                <button class="btn btn-primary" id="confirmAddColumn">添加列</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" data-action="edit">
+            <i class="fas fa-edit"></i>
+            编辑
+        </div>
+        <div class="context-menu-item" data-action="copy">
+            <i class="fas fa-copy"></i>
+            复制
+        </div>
+        <div class="context-menu-item" data-action="paste">
+            <i class="fas fa-paste"></i>
+            粘贴
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" data-action="insertRow">
+            <i class="fas fa-plus"></i>
+            插入行
+        </div>
+        <div class="context-menu-item" data-action="deleteRow">
+            <i class="fas fa-trash"></i>
+            删除行
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" data-action="uploadImage">
+            <i class="fas fa-image"></i>
+            上传图片
+        </div>
+    </div>
+
+    <!-- 引入 VTable -->
+    <script src="https://unpkg.com/@visactor/vtable@1.5.0/dist/vtable.min.js"></script>
+    
+    <!-- 应用脚本 -->
+    <script src="js/utils.js"></script>
+    <script src="js/tableManager.js"></script>
+    <script src="js/simpleTableManager.js"></script>
+    <script src="js/filterManager.js"></script>
+    <script src="js/groupManager.js"></script>
+    <script src="js/imageManager.js"></script>
+    <script src="js/multiSelectManager.js"></script>
+    <script src="js/app.js"></script>
+    <script src="context-menu.js"></script>
+    
+    <script>
+        // 确保 VTable 加载完成后再初始化应用
+        window.addEventListener('load', function() {
+            // 无论是否使用 VTable，都隐藏加载状态
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+            }, 1500); // 给应用足够时间初始化
+            
+            if (typeof VTable === 'undefined') {
+                console.log('VTable 库未加载，使用简化版表格管理器');
+            }
+        });
+        
+        // 确保在DOM加载完成后也隐藏加载状态
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

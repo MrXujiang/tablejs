@@ -1,0 +1,9 @@
+姓名,年龄,邮箱,部门,入职日期,状态
+张三,28,zhangsan@example.com,技术部,2023-01-15,在职
+李四,32,lisi@example.com,产品部,2022-08-20,在职
+王五,26,wangwu@example.com,设计部,2023-03-10,在职
+赵六,30,zhaoliu@example.com,运营部,2022-12-05,休假
+钱七,29,qianqi@example.com,市场部,2023-02-28,在职
+孙八,35,sunba@example.com,技术部,2021-11-12,在职
+周九,27,zhoujiu@example.com,人事部,2023-05-18,在职
+吴十,31,wushi@example.com,财务部,2022-09-30,离职
